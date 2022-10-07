@@ -1,0 +1,201 @@
+import QtQuick 2.0
+import Felgo 3.0
+
+Item {
+    id: finalScreen
+
+    anchors.fill: parent
+
+    visible: true
+
+    Rectangle {
+        id: backColor
+        anchors.fill: parent
+        color: gameColors.iFaceBGCol
+
+        NumberAnimation {
+            id: backFade
+            target: backColor
+            running: finalScreen.visible
+            property: "opacity"
+            from: 0
+            to: 0.6
+            duration: 1800
+            easing.type: Easing.OutSine
+        }
+    }
+
+    Rectangle {
+        id: blackStripe
+        width: 200
+        height: parent.height
+        anchors.centerIn: parent
+        color: "black"
+        clip: true
+
+        Image {
+            id: totBG
+            width: 160
+            height: 240
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.topMargin: 64
+            source: "../assets/gfx/totBG_earth.png"
+            opacity: 0.4
+        }
+
+        Item {
+            id: header
+            width: parent.width
+            height: parent.height
+
+            Text {
+                id: headerTxtDS
+                font.family: headerTxt.font.family
+                font.pixelSize: headerTxt.font.pixelSize
+                anchors.centerIn: headerTxt
+                anchors.horizontalCenterOffset: 2
+                anchors.verticalCenterOffset: 2
+                color: gameColors.iFaceCol
+                text: headerTxt.text
+                visible: headerTxt.visible
+            }
+            Text {
+                id: headerTxt
+                font.family: gameFont.name
+                font.pixelSize: 24
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: parent.top
+                anchors.topMargin: 24
+                color: "white"
+                text: "Final Results"
+                visible: false
+
+                NumberAnimation {
+                    id: hdrTxtDrop
+                    target: headerTxt
+                    property: "anchors.topMargin"
+                    from: -24
+                    to: 24
+                    duration: 600
+                    onStarted: target.visible = true
+                    easing.type: Easing.OutBack
+                }
+            }
+        }
+    }
+
+    Item {
+        id: sideStripes
+        width: 200
+        height: parent.height
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: parent.top
+        visible: false
+
+        NumberAnimation {
+            id: stripeStart
+            target: blackStripe
+            running: finalScreen.visible
+            property: "width"
+            from: 0
+            to: 200
+            duration: 600
+            easing.type: Easing.OutSine
+            onStopped: {
+                sideStripes.visible = true
+                sideStripesDown.start()
+                hdrTxtDrop.start()
+            }
+        }
+
+        Rectangle {
+            id: stripeLeft
+            width: 4
+            height: parent.height + 12
+            anchors.top: parent.top
+            anchors.left: parent.left
+            color: "white"
+
+            Image {
+                width: 24
+                height: 12
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.bottom
+                source: "../assets/gfx/highlight.png"
+            }
+
+            Image {
+                width: 24
+                height: width
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.bottom
+                source: "../assets/gfx/shine.png"
+                rotation: 35
+            }
+        }
+        Rectangle {
+            id: stripeRight
+            width: 4
+            height: parent.height + 12
+            anchors.top: parent.top
+            anchors.right: parent.right
+            color: "white"
+
+            Image {
+                width: 24
+                height: 12
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.bottom
+                source: "../assets/gfx/highlight.png"
+            }
+
+            Image {
+                width: 24
+                height: width
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.bottom
+                source: "../assets/gfx/shine.png"
+                rotation: 35
+            }
+        }
+
+        ParallelAnimation {
+            id: sideStripesDown
+
+            NumberAnimation {
+                target: sideStripes
+                property: "height"
+                from: 0
+                to: parent.height + 12
+                duration: 800
+                easing.type: Easing.InOutSine
+            }
+            NumberAnimation {
+                target: sideStripes
+                property: "opacity"
+                from: 0
+                to: 1
+                duration: 800
+                easing.type: Easing.InOutSine
+            }
+        }
+    }
+
+
+    MouseArea {
+        anchors.fill: parent
+        onClicked: {
+            headerTxt.visible = false
+            sideStripes.visible = false
+            backFade.start()
+            stripeStart.start()
+        }
+    }
+
+    function reveal() {
+        finalScreen.visible = true
+        //        backFade.start()
+        bgIn.start()
+    }
+}

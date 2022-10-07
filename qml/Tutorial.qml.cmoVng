@@ -1,0 +1,1435 @@
+import QtQuick 2.0
+import Felgo 3.0
+
+Item {
+    id: gameTut
+
+    anchors.fill: parent
+
+    property int tutStage: 0
+
+    Rectangle {
+        id: backGrad
+        anchors.fill: parent
+        gradient: Gradient {
+            GradientStop { position: 0.0; color: gameColors.iFaceCol}
+            GradientStop { position: 1.0; color: gameColors.iFaceBGCol}
+        }
+        opacity: 0.4
+
+        function fade(out) {
+            if (out === undefined || out === "out") {
+                backFade.from = 0.4
+                backFade.to = 0
+                backFade.start()
+            }
+            if (out === "in") {
+                backFade.from = 0
+                backFade.to = 0.4
+                backFade.start()
+            }
+        }
+
+        NumberAnimation {
+            id: backFade
+            target: backGrad
+            property: "opacity"
+            duration: 200
+        }
+    }
+
+    Item {
+        id: topBotGrads
+        anchors.fill: parent
+        opacity: 0.4
+
+        visible: tutStage >= 0
+
+        Rectangle {
+            id: topGrad
+            width: parent.width
+            height: parent.height / 4
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.top
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: gameColors.iFaceCol}
+                GradientStop { position: 1.0; color: "transparent"}
+            }
+        }
+
+        Rectangle {
+            id: botGrad
+            width: parent.width
+            height: parent.height / 4
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottom: parent.bottom
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: "transparent"}
+                GradientStop { position: 1.0; color: gameColors.iFaceBGCol}
+            }
+        }
+    }
+
+    Item {
+        id: colHLs
+        anchors.fill: parent
+
+        visible: tutStage === 3
+
+        SequentialAnimation {
+            id: colsFade
+            running: colHLs.visible
+            loops: Animation.Infinite
+
+            property int duration: 1200
+
+            ParallelAnimation {
+                NumberAnimation {
+                    target: leftHL
+                    property: "opacity"
+                    from: 0.2
+                    to: 0.6
+                    duration: colsFade.duration
+                }
+                NumberAnimation {
+                    target: rightHL
+                    property: "opacity"
+                    from: 0.8
+                    to: 0.4
+                    duration: colsFade.duration
+                }
+            }
+            ParallelAnimation {
+                NumberAnimation {
+                    target: leftHL
+                    property: "opacity"
+                    from: 0.6
+                    to: 0.2
+                    duration: colsFade.duration
+                }
+                NumberAnimation {
+                    target: rightHL
+                    property: "opacity"
+                    from: 0.4
+                    to: 0.8
+                    duration: colsFade.duration
+                }
+            }
+        }
+
+        Rectangle {
+            id: leftHL
+            width: 80
+            height: 280
+            radius: 6
+            anchors.right: parent.horizontalCenter
+            anchors.rightMargin: 2
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: -20
+            color: gameColors.iFaceLightCol
+            opacity: 0.6
+        }
+
+        Rectangle {
+            id: leftHLBorder
+            anchors.fill: leftHL
+            radius: 6
+            color: "transparent"
+            border.color: gameColors.iFaceBrightCol
+            border.width: 2
+        }
+
+        Item {
+            id: upArrows
+            width: leftHL.width
+            height: 40
+            anchors.horizontalCenter: leftHL.horizontalCenter
+            anchors.bottom: leftHL.bottom
+            anchors.bottomMargin: 6
+
+            Image {
+                width: parent.width - 12
+                height: 20
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: parent.top
+                source: "../assets/gfx/tri.png"
+                rotation: 180
+            }
+
+            Image {
+                width: parent.width - 12
+                height: 20
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.bottom: parent.bottom
+                source: "../assets/gfx/tri.png"
+                rotation: 180
+            }
+
+            SequentialAnimation {
+                running: colHLs.visible
+                loops: Animation.Infinite
+
+                NumberAnimation {
+                    target: upArrows
+                    property: "anchors.bottomMargin"
+                    from: 6
+                    to: 12
+                    duration: 600
+                    easing.type: Easing.OutCirc
+                }
+                NumberAnimation {
+                    target: upArrows
+                    property: "anchors.bottomMargin"
+                    from: 12
+                    to: 6
+                    duration: 600
+                    easing.type: Easing.InCirc
+                }
+            }
+
+        }
+
+        Rectangle {
+            id: rightHL
+            width: 80
+            height: 280
+            radius: 6
+            anchors.left: parent.horizontalCenter
+            anchors.leftMargin: 2
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: -20
+            color: gameColors.iFaceCol
+            opacity: 0.6
+        }
+
+        Rectangle {
+            id: rightHLBorder
+            anchors.fill: rightHL
+            radius: 6
+            color: "transparent"
+            border.color: gameColors.iFaceBrightCol
+            border.width: 2
+        }
+
+        Item {
+            id: downArrows
+            width: rightHL.width
+            height: 40
+            anchors.horizontalCenter: rightHL.horizontalCenter
+            anchors.bottom: rightHL.bottom
+            anchors.bottomMargin: 6
+
+            Image {
+                width: parent.width - 12
+                height: 20
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: parent.top
+                source: "../assets/gfx/tri.png"
+            }
+
+            Image {
+                width: parent.width - 12
+                height: 20
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.bottom: parent.bottom
+                source: "../assets/gfx/tri.png"
+            }
+
+            SequentialAnimation {
+                running: colHLs.visible
+                loops: Animation.Infinite
+
+                NumberAnimation {
+                    target: downArrows
+                    property: "anchors.bottomMargin"
+                    from: 12
+                    to: 6
+                    duration: 600
+                    easing.type: Easing.InCirc
+                }
+                NumberAnimation {
+                    target: downArrows
+                    property: "anchors.bottomMargin"
+                    from: 6
+                    to: 12
+                    duration: 600
+                    easing.type: Easing.OutCirc
+                }
+            }
+        }
+    }
+
+    Item {
+        id: tutPlat
+        width: 260
+        height: 80
+        anchors.centerIn: parent
+
+        visible: tutStage >= 0 && tutStage < 6
+
+        Rectangle {
+            id: platDS
+            width: plat.width
+            height: plat.height
+            anchors.centerIn: plat
+            anchors.horizontalCenterOffset: 3
+            anchors.verticalCenterOffset: 3
+            radius: plat.radius
+            color: gameColors.iFaceDSCol
+        }
+
+        Rectangle {
+            id: plat
+            anchors.fill: parent
+            radius: 6
+            color: gameColors.iFaceDarkCol
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: gameColors.iFaceBGCol}
+                GradientStop { position: 1.0; color: gameColors.iFaceCol}
+            }
+            border.color: gameColors.iFaceBrightCol
+            border.width: 2
+        }
+
+        Item {
+            id: platBG
+            width: plat.width - plat.border.width * 2
+            height: plat.height - plat.border.width * 2
+            anchors.centerIn: plat
+            clip: true
+
+            Image {
+                width: 320
+                height: 480
+                anchors.centerIn: parent
+                source: "../assets/gfx/tutBG.png"
+                opacity: 0.2
+            }
+        }
+
+        Item {
+            id: backRect
+            width: 100
+            height: 20
+            anchors.left: parent.left
+            anchors.leftMargin: 14
+            anchors.top: parent.verticalCenter
+            anchors.topMargin: 8
+
+            Rectangle {
+                id: back
+                anchors.fill: parent
+                radius: 4
+                color: gameColors.iFaceCol
+                border.color: "black"
+                border.width: 2
+
+                visible: tutStage > 2
+
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onEntered: {
+                        back.color = gameColors.iFaceLightCol
+                        back.border.color = "white"
+                        backTxt.color = "white"
+                    }
+                    onExited: {
+                        back.color = gameColors.iFaceCol
+                        back.border.color = "black"
+                        backTxt.color = "black"
+                    }
+                    onClicked: {
+                        bitClick.play()
+                        if (tutStage === 3) {
+                            backGrad.fade("in")
+                            tutStage = 2
+                        }
+                        if (tutStage === 4) {
+                            backGrad.fade()
+                            tutStage = 3
+                        }
+                        if (tutStage === 5)
+                            tutStage = 4
+                        if (tutStage === 6)
+                            tutStage = 5
+                    }
+                }
+
+                Text {
+                    id: backTxtDS
+                    anchors.centerIn: backTxt
+                    anchors.horizontalCenterOffset: 1
+                    anchors.verticalCenterOffset: 1
+                    font.family: backTxt.font.family
+                    font.pixelSize: backTxt.font.pixelSize
+                    color: gameColors.iFaceDarkCol
+                    text: backTxt.text
+                }
+
+                Text {
+                    id: backTxt
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.verticalCenterOffset: 1
+                    font.family: gameFont.name
+                    font.pixelSize: 14
+                    color: "black"
+                    text: "<< Back"
+                }
+            }
+
+        }
+
+        Item {
+            id: nextRect
+            width: 100
+            height: 20
+            anchors.right: parent.right
+            anchors.rightMargin: 14
+            anchors.top: parent.verticalCenter
+            anchors.topMargin: 8
+
+            visible: tutStage > 1
+
+            Rectangle {
+                id: next
+                anchors.fill: parent
+                radius: 4
+                color: gameColors.iFaceCol
+                border.color: "black"
+                border.width: 2
+
+                MouseArea {
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    onEntered: {
+                        next.color = gameColors.iFaceLightCol
+                        next.border.color = "white"
+                        nextTxt.color = "white"
+                    }
+                    onExited: {
+                        next.color = gameColors.iFaceCol
+                        next.border.color = "black"
+                        nextTxt.color = "black"
+                    }
+                    onClicked: {
+                        bitClick.play()
+                        if (tutStage === 5)
+                            tutStage = 6
+                        if (tutStage === 4)
+                            tutStage = 5
+                        if (tutStage === 3) {
+                            backGrad.fade("in")
+                            tutStage = 4
+                        }
+                        if (tutStage === 2) {
+                            backGrad.fade()
+                            tutStage = 3
+                        }
+                        if (tutStage === 1)
+                            tutStage = 2
+                    }
+                }
+
+                Text {
+                    id: nextTxtDS
+                    anchors.centerIn: nextTxt
+                    anchors.horizontalCenterOffset: 1
+                    anchors.verticalCenterOffset: 1
+                    font.family: nextTxt.font.family
+                    font.pixelSize: nextTxt.font.pixelSize
+                    color: gameColors.iFaceDarkCol
+                    text: nextTxt.text
+                }
+
+                Text {
+                    id: nextTxt
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.verticalCenterOffset: 1
+                    font.family: gameFont.name
+                    font.pixelSize: 14
+                    color: "black"
+                    text: "Next >>"
+                }
+            }
+
+        }
+
+    }
+
+    Item {
+        id: tutPlat2
+        width: 60
+        height: width
+
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.verticalCenter
+        anchors.bottomMargin: 50
+
+        visible: tutStage >= 4
+
+        Rectangle {
+            id: plat2DS
+            width: plat2.width
+            height: plat2.height
+            radius: plat2.radius
+            anchors.centerIn: plat2
+            anchors.horizontalCenterOffset: 3
+            anchors.verticalCenterOffset: 3
+            color: gameColors.iFaceDSCol
+        }
+
+        Rectangle {
+            id: plat2
+            anchors.fill: parent
+            radius: 6
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: gameColors.iFaceBGCol}
+                GradientStop { position: 1.0; color: gameColors.iFaceCol}
+            }
+            border.color: gameColors.iFaceBrightCol
+            border.width: 2
+
+            Item {
+                id: plat2BG
+                width: parent.width - parent.border.width * 2
+                height: parent.height - parent.border.width * 2
+                anchors.centerIn: parent
+                clip: true
+
+                Image {
+                    width: 320
+                    height: 480
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.top: parent.top
+                    source: "../assets/gfx/tutBG.png"
+                    opacity: 0.2
+                }
+            }
+        }
+    }
+
+    Rectangle {
+        id: skipBut
+        width: 120
+        height: 20
+        radius: 4
+        anchors.left: parent.left
+        anchors.leftMargin: 30
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 20
+        color: gameColors.iFaceCol
+        border.color: "black"
+        border.width: 2
+
+        visible: tutStage > 1
+
+        MouseArea {
+            anchors.fill: parent
+            hoverEnabled: true
+            onEntered: {
+                skipBut.color = gameColors.iFaceLightCol
+                skipBut.border.color = "white"
+                skipButTxt.color = "white"
+            }
+            onExited: {
+                skipBut.color = gameColors.iFaceCol
+                skipBut.border.color = "black"
+                skipButTxt.color = "black"
+            }
+            onClicked: {
+                bitClick.play()
+                backGrad.fade()
+                elementsEnabled = true
+                tutStage = -1
+            }
+        }
+
+        Text {
+            id: skipButTxtDS
+            anchors.centerIn: skipButTxt
+            anchors.horizontalCenterOffset: 1
+            anchors.verticalCenterOffset: 1
+            font.family: skipButTxt.font.family
+            font.pixelSize: skipButTxt.font.pixelSize
+            color: gameColors.iFaceDarkCol
+            text: skipButTxt.text
+        }
+
+        Text {
+            id: skipButTxt
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenterOffset: 1
+            font.family: gameFont.name
+            font.pixelSize: 14
+            color: "black"
+            text: "Skip Tutorial >>"
+        }
+    }
+
+    Item {
+        id: intro1
+        width: 260
+        height: 80
+        anchors.centerIn: parent
+
+        visible: tutStage === 0
+
+        Text {
+            id: intro1txtDS
+            font.family: intro1txt.font.family
+            font.pixelSize: intro1txt.font.pixelSize
+            horizontalAlignment: intro1txt.horizontalAlignment
+            anchors.centerIn: intro1txt
+            anchors.horizontalCenterOffset: 1
+            anchors.verticalCenterOffset: 1
+            color: "black" //gameColors.iFaceDSCol
+            text: intro1txt.text
+        }
+
+        Text {
+            id: intro1txt
+            font.family: chatFont.name
+            font.pixelSize: 13
+            horizontalAlignment: Text.AlignHCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.top
+            anchors.topMargin: 10
+            color: "white"
+            text: "Hi! I'm helperHand!<br/>Would you like a starting lesson?"
+        }
+
+        Rectangle {
+            id: yBut
+            width: 100
+            height: 20
+            radius: 4
+            anchors.right: parent.horizontalCenter
+            anchors.rightMargin: 8
+            anchors.top: parent.verticalCenter
+            anchors.topMargin: 8
+            color: gameColors.iFaceCol
+            border.color: "black"
+            border.width: 2
+
+            MouseArea {
+                anchors.fill: parent
+                hoverEnabled: true
+                onEntered: {
+                    yBut.color = gameColors.iFaceLightCol
+                    yBut.border.color = "white"
+                    yButTxt.color = "white"
+                }
+                onExited: {
+                    yBut.color = gameColors.iFaceCol
+                    yBut.border.color = "black"
+                    yButTxt.color = "black"
+                }
+                onClicked: {
+                    bitClick.play()
+                    tutStage = 1
+                }
+            }
+
+            Text {
+                id: yButTxtDS
+                anchors.centerIn: yButTxt
+                anchors.horizontalCenterOffset: 1
+                anchors.verticalCenterOffset: 1
+                font.family: yButTxt.font.family
+                font.pixelSize: yButTxt.font.pixelSize
+                color: gameColors.iFaceDarkCol
+                text: yButTxt.text
+            }
+
+            Text {
+                id: yButTxt
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: 1
+                font.family: gameFont.name
+                font.pixelSize: 14
+                color: "black"
+                text: "Yes, please!"
+            }
+        }
+
+        Rectangle {
+            id: nBut
+            width: 100
+            height: 20
+            radius: 4
+            anchors.left: parent.horizontalCenter
+            anchors.leftMargin: 8
+            anchors.top: parent.verticalCenter
+            anchors.topMargin: 8
+            color: gameColors.iFaceCol
+            border.color: "black"
+            border.width: 2
+
+            MouseArea {
+                anchors.fill: parent
+                hoverEnabled: true
+                onEntered: {
+                    nBut.color = gameColors.iFaceLightCol
+                    nBut.border.color = "white"
+                    nButTxt.color = "white"
+                }
+                onExited: {
+                    nBut.color = gameColors.iFaceCol
+                    nBut.border.color = "black"
+                    nButTxt.color = "black"
+                }
+                onClicked: {
+                    bitClick.play()
+                    backGrad.fade()
+                    elementsEnabled = true
+                    tutStage = -1
+                }
+            }
+
+            Text {
+                id: nButTxtDS
+                anchors.centerIn: nButTxt
+                anchors.horizontalCenterOffset: 1
+                anchors.verticalCenterOffset: 1
+                font.family: nButTxt.font.family
+                font.pixelSize: nButTxt.font.pixelSize
+                color: gameColors.iFaceDarkCol
+                text: nButTxt.text
+            }
+
+            Text {
+                id: nButTxt
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: 1
+                font.family: gameFont.name
+                font.pixelSize: 14
+                color: "black"
+                text: "No, thanks."
+            }
+        }
+    }
+
+    Item {
+        id: intro2
+        width: 260
+        height: 80
+        anchors.centerIn: parent
+
+        visible: tutStage === 1
+
+        Text {
+            id: intro2txtDS
+            font.family: intro2txt.font.family
+            font.pixelSize: intro2txt.font.pixelSize
+            horizontalAlignment: intro2txt.horizontalAlignment
+            anchors.centerIn: intro2txt
+            anchors.horizontalCenterOffset: 1
+            anchors.verticalCenterOffset: 1
+            color: "black" //gameColors.iFaceDSCol
+            text: intro2txt.text
+        }
+
+        Text {
+            id: intro2txt
+            font.family: chatFont.name
+            font.pixelSize: 13
+            horizontalAlignment: Text.AlignHCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.top
+            anchors.topMargin: 10
+            color: "white"
+            text: "Welcome!<br/>Let's talk about DNA!"
+        }
+
+        Rectangle {
+            id: okayBut
+            width: 100
+            height: 20
+            radius: 4
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.verticalCenter
+            anchors.topMargin: 8
+            color: gameColors.iFaceCol
+            border.color: "black"
+            border.width: 2
+
+            MouseArea {
+                anchors.fill: parent
+                hoverEnabled: true
+                onEntered: {
+                    okayBut.color = gameColors.iFaceLightCol
+                    okayBut.border.color = "white"
+                    okayTxt.color = "white"
+                }
+                onExited: {
+                    okayBut.color = gameColors.iFaceCol
+                    okayBut.border.color = "black"
+                    okayTxt.color = "black"
+                }
+                onClicked: {
+                    bitClick.play()
+                    tutStage = 2
+                }
+            }
+
+            Text {
+                id: okayTxtDS
+                anchors.centerIn: okayTxt
+                anchors.horizontalCenterOffset: 1
+                anchors.verticalCenterOffset: 1
+                font.family: okayTxt.font.family
+                font.pixelSize: okayTxt.font.pixelSize
+                color: gameColors.iFaceDarkCol
+                text: okayTxt.text
+            }
+
+            Text {
+                id: okayTxt
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: 1
+                font.family: gameFont.name
+                font.pixelSize: 14
+                color: "black"
+                text: "Okay!"
+            }
+        }
+    }
+
+    Item {
+        id: intro3
+        width: 260
+        height: 80
+        anchors.centerIn: parent
+
+        visible: tutStage === 2
+
+        Text {
+            id: intro3txtDS
+            font.family: intro3txt.font.family
+            font.pixelSize: intro3txt.font.pixelSize
+            horizontalAlignment: intro3txt.horizontalAlignment
+            anchors.centerIn: intro3txt
+            anchors.horizontalCenterOffset: 1
+            anchors.verticalCenterOffset: 1
+            color: "black" //gameColors.iFaceDSCol
+            text: intro3txt.text
+        }
+
+        Text {
+            id: intro3txt
+            font.family: chatFont.name
+            font.pixelSize: 13
+            horizontalAlignment: Text.AlignHCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.top
+            anchors.topMargin: 10
+            color: "white"
+            text: "When DNA is not twisted or coiled up<br/>like normal, it looks like a LADDER."
+        }
+    }
+
+    Item {
+        id: intro4
+        anchors.fill: parent
+        visible: tutStage === 3
+
+        Item {
+            id: plat4Box
+            width: 260
+            height: 80
+            anchors.centerIn: parent
+
+            Text {
+                id: intro4txtDS
+                font.family: intro4txt.font.family
+                font.pixelSize: intro4txt.font.pixelSize
+                horizontalAlignment: intro4txt.horizontalAlignment
+                anchors.centerIn: intro4txt
+                anchors.horizontalCenterOffset: 1
+                anchors.verticalCenterOffset: 1
+                color: "black"
+                text: intro4txt.text
+            }
+
+            Text {
+                id: intro4txt
+                font.family: chatFont.name
+                font.pixelSize: 13
+                horizontalAlignment: Text.AlignHCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: parent.top
+                anchors.topMargin: 10
+                color: "white"
+                text: "The LEFT side goes UP, while<br/>the RIGHT side goes DOWN."
+            }
+        }
+    }
+
+    Item {
+        id: intro5
+        anchors.fill: parent
+        visible: tutStage === 4
+
+        Item {
+            id: plat5Box
+            width: 260
+            height: 80
+            anchors.centerIn: parent
+
+            Text {
+                id: intro5txtDS
+                font.family: intro5txt.font.family
+                font.pixelSize: intro5txt.font.pixelSize
+                horizontalAlignment: intro5txt.horizontalAlignment
+                anchors.centerIn: intro5txt
+                anchors.horizontalCenterOffset: 1
+                anchors.verticalCenterOffset: 1
+                color: "black"
+                text: intro5txt.text
+            }
+
+            Text {
+                id: intro5txt
+                font.family: chatFont.name
+                font.pixelSize: 13
+                horizontalAlignment: Text.AlignHCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.top: parent.top
+                anchors.topMargin: 10
+                color: "white"
+                text: "When a BIT is facing the wrong<br/>direction, it gets an ERROR."
+            }
+
+            Item {
+                id: errorBox
+                width: 60
+                height: width
+
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.bottom: parent.top
+                anchors.bottomMargin: 10
+
+                Image {
+                    id: bitGlow
+                    width: 40
+                    height: width
+                    anchors.centerIn: parent
+                    source: "../assets/gfx/highlight.png"
+                    Timer {
+                        running: true
+                        repeat: true
+                        interval: 60
+                        onTriggered: bitGlow.opacity = (Math.floor(Math.random() * 40) + 40) / 100
+                    }
+                }
+
+                Image {
+                    id: bitImage
+                    width: 32
+                    height: width
+
+                    anchors.centerIn: parent
+
+                    source: "../assets/gfx/dna_dr2.png"
+
+                    SequentialAnimation {
+                        id: errFade
+                        running: intro5.visible
+                        loops: Animation.Infinite
+
+                        property int duration: 1200
+
+                        ParallelAnimation {
+                            NumberAnimation {
+                                target: err1
+                                property: "opacity"
+                                duration: errFade.duration
+                                from: 1
+                                to: 0
+                            }
+                            NumberAnimation {
+                                target: err2
+                                property: "opacity"
+                                duration: errFade.duration
+                                from: 0
+                                to: 1
+                            }
+                        }
+                        ParallelAnimation {
+                            NumberAnimation {
+                                target: err1
+                                property: "opacity"
+                                duration: errFade.duration
+                                from: 0
+                                to: 1
+                            }
+                            NumberAnimation {
+                                target: err2
+                                property: "opacity"
+                                duration: errFade.duration
+                                from: 1
+                                to: 0
+                            }
+                        }
+                    }
+
+                    Image {
+                        id: err1
+                        width: 40
+                        height: width
+                        anchors.centerIn: parent
+                        source: "../assets/gfx/error.png"
+                    } //Close Image 'bitErrorSign'. (Complete)
+
+                    //The image that appears if there is an error. (Complete)
+                    Image {
+                        id: err2
+                        width: 40
+                        height: width
+                        anchors.centerIn: parent
+                        source: "../assets/gfx/error2.png"
+                    } //Close Image 'bitErrorSign'. (Complete)
+
+                }
+            }
+        }
+    }
+
+    Item {
+        id: intro6
+        width: 260
+        height: 80
+        anchors.centerIn: parent
+
+        visible: tutStage === 5
+
+        Text {
+            id: intro6txtDS
+            font.family: intro6txt.font.family
+            font.pixelSize: intro6txt.font.pixelSize
+            horizontalAlignment: intro6txt.horizontalAlignment
+            anchors.centerIn: intro6txt
+            anchors.horizontalCenterOffset: 1
+            anchors.verticalCenterOffset: 1
+            color: "black" //gameColors.iFaceDSCol
+            text: intro6txt.text
+        }
+
+        Text {
+            id: intro6txt
+            font.family: chatFont.name
+            font.pixelSize: 13
+            horizontalAlignment: Text.AlignHCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.top
+            anchors.topMargin: 10
+            color: "white"
+            text: "Press and Hold any BIT to<br/>FLIP it and remove an ERROR."
+        }
+
+        Item {
+            id: errorBox2
+            width: 60
+            height: width
+
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottom: parent.top
+            anchors.bottomMargin: 10
+
+            Image {
+                id: bitGlow2
+                width: 40
+                height: width
+                anchors.centerIn: parent
+                source: "../assets/gfx/highlight.png"
+                Timer {
+                    running: true
+                    repeat: true
+                    interval: 60
+                    onTriggered: bitGlow2.opacity = (Math.floor(Math.random() * 40) + 40) / 100
+                }
+            }
+
+            Item {
+                id: flipImage
+                width: 40
+                height: width
+
+                anchors.centerIn: parent
+
+                Image {
+                    id: bitImage2
+                    width: 32
+                    height: width
+                    anchors.centerIn: parent
+                    source: "../assets/gfx/dna_dr.png"
+
+                    Image {
+                        id: err1b
+                        width: 40
+                        height: width
+                        anchors.centerIn: parent
+                        source: "../assets/gfx/error.png"
+                    } //Close Image 'bitErrorSign'. (Complete)
+                }
+
+                Timer {
+                    id: flashTimer
+                    running: false
+                    interval: 600
+                    onTriggered: flipAnim.start()
+                }
+
+                SequentialAnimation {
+                    id: flipAnim
+                    running: intro6.visible
+
+                    onStarted: {
+                        bitImage2.source = "../assets/gfx/dna_dr.png"
+                        err1b.visible = true
+                    }
+                    onStopped: {
+                        bitImage2.source = "../assets/gfx/dna_dr2.png"
+                        err1b.visible = false
+                        bitFlash.start()
+                    }
+
+                    NumberAnimation {
+                        target: holdBar
+                        property: "width"
+                        from: 40
+                        to: 0
+                        duration: 800
+                    }
+                    NumberAnimation {
+                        target: bitImage2
+                        property: "rotation"
+                        from: 0
+                        to: 180
+                        duration: 200
+                        //                            onStopped: flashStart.start()
+                    }
+                }
+
+                Rectangle {
+                    id: holdBar
+                    width: 40
+                    height: 12
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    radius: height / 2
+                    color: "white"
+                    border.color: "black"
+                    border.width: 2
+                    anchors.bottom: parent.top
+                }
+
+                Rectangle {
+                    id: bitFlash
+
+                    signal start()
+                    onStart: flashStart.start()
+
+                    property int duration: 600
+
+                    width: 36
+                    height: width
+                    radius: height / 2
+                    anchors.centerIn: parent
+                    color: "transparent"
+                    border.width: width / 2
+                    border.color: "white"
+
+                    visible: false
+
+                    Image {
+                        id: flashShine
+                        width: parent.width
+                        height: parent.height
+                        anchors.centerIn: parent
+                        source: "../assets/gfx/shine.png"
+
+                        NumberAnimation {
+                            target: flashShine
+                            property: "rotation"
+                            running: bitFlash.visible
+                            loops: Animation.Infinite
+                            from: 0
+                            to: {
+                                if (Math.floor(Math.random() * 2) < 1)
+                                    return -360
+                                else return 360
+                            }
+                            duration: 600
+                        }
+                    }
+
+                    SequentialAnimation {
+                        id: flashStart
+
+                        onStarted: {
+                            bitFlash.visible = true
+                        } //Close onStarted.
+
+                        NumberAnimation {
+                            target: bitFlash
+                            property: "scale"
+                            duration: bitFlash.duration / 2
+                            from: 0
+                            to: 1
+                        } //Close NumberAnimation.
+
+                        NumberAnimation {
+                            target: bitFlash
+                            property: "border.width"
+                            duration: bitFlash.duration / 2
+                            from: bitFlash.width / 2
+                            to: 0
+                            easing.type: Easing.OutCubic
+                        } //Close NumberAnimation.
+
+                        NumberAnimation {
+                            target: bitFlash
+                            property: "scale"
+                            duration: bitFlash.duration / 2
+                            from: 1
+                            to: 0
+                            easing.amplitude: Easing.InBack
+                        } //Close NumberAnimation.
+
+                        onStopped: {
+                            bitFlash.border.width = bitFlash.width / 2
+                            bitFlash.visible = false
+                            flashTimer.start()
+                        } //Close onStarted.
+
+                    } //Close SequentialAnimation.
+
+                } //Close Rectangle 'flashIcon'.
+
+            }
+        }
+    }
+
+    Item {
+        id: intro7
+        width: 260
+        height: 80
+        anchors.centerIn: parent
+
+        visible: tutStage === 6
+
+        Text {
+            id: intro7txtDS
+            font.family: intro7txt.font.family
+            font.pixelSize: intro7txt.font.pixelSize
+            horizontalAlignment: intro7txt.horizontalAlignment
+            anchors.centerIn: intro7txt
+            anchors.horizontalCenterOffset: 1
+            anchors.verticalCenterOffset: 1
+            color: "black" //gameColors.iFaceDSCol
+            text: intro7txt.text
+        }
+
+        Text {
+            id: intro7txt
+            font.family: chatFont.name
+            font.pixelSize: 13
+            horizontalAlignment: Text.AlignHCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.top
+            anchors.topMargin: 10
+            color: "white"
+            text: "Press and Hold any BIT to<br/>FLIP it and remove an ERROR."
+        }
+
+        Item {
+            id: errorBox3
+            width: 60
+            height: width
+
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottom: parent.top
+            anchors.bottomMargin: 10
+
+            Image {
+                id: bitGlow3
+                width: 40
+                height: width
+                anchors.centerIn: parent
+                source: "../assets/gfx/highlight.png"
+                Timer {
+                    running: true
+                    repeat: true
+                    interval: 60
+                    onTriggered: bitGlow2.opacity = (Math.floor(Math.random() * 40) + 40) / 100
+                }
+            }
+
+            Item {
+                id: flipImage2
+                width: 40
+                height: width
+
+                anchors.centerIn: parent
+
+                Image {
+                    id: bitImage3
+                    width: 32
+                    height: width
+                    anchors.centerIn: parent
+                    source: "../assets/gfx/dna_dr.png"
+
+                    Image {
+                        id: err1c
+                        width: 40
+                        height: width
+                        anchors.centerIn: parent
+                        source: "../assets/gfx/error.png"
+                    } //Close Image 'bitErrorSign'. (Complete)
+                }
+
+                Timer {
+                    id: flashTimer2
+                    running: false
+                    interval: 600
+                    onTriggered: flipAnim2.start()
+                }
+
+                SequentialAnimation {
+                    id: flipAnim2
+                    running: intro7.visible
+
+                    onStarted: {
+                        bitImage3.source = "../assets/gfx/dna_a.png"
+                        err1b.visible = true
+                    }
+                    onStopped: {
+                        bitImage3.source = "../assets/gfx/dna_a2.png"
+                        err1c.visible = false
+                        bitFlash2.start()
+                    }
+
+                    NumberAnimation {
+                        target: holdBar
+                        property: "width"
+                        from: 40
+                        to: 0
+                        duration: 800
+                    }
+                    NumberAnimation {
+                        target: bitImage3
+                        property: "rotation"
+                        from: 0
+                        to: 180
+                        duration: 200
+                        //                            onStopped: flashStart.start()
+                    }
+                }
+
+                Rectangle {
+                    id: holdBar2
+                    width: 40
+                    height: 12
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    radius: height / 2
+                    color: "white"
+                    border.color: "black"
+                    border.width: 2
+                    anchors.bottom: parent.top
+                }
+
+                Rectangle {
+                    id: bitFlash2
+
+                    signal start()
+                    onStart: flashStart2.start()
+
+                    property int duration: 600
+
+                    width: 36
+                    height: width
+                    radius: height / 2
+                    anchors.centerIn: parent
+                    color: "transparent"
+                    border.width: width / 2
+                    border.color: "white"
+
+                    visible: false
+
+                    Image {
+                        id: flashShine2
+                        width: parent.width
+                        height: parent.height
+                        anchors.centerIn: parent
+                        source: "../assets/gfx/shine.png"
+
+                        NumberAnimation {
+                            target: flashShine2
+                            property: "rotation"
+                            running: bitFlash.visible
+                            loops: Animation.Infinite
+                            from: 0
+                            to: {
+                                if (Math.floor(Math.random() * 2) < 1)
+                                    return -360
+                                else return 360
+                            }
+                            duration: 600
+                        }
+                    }
+
+                    SequentialAnimation {
+                        id: flashStart2
+
+                        onStarted: {
+                            bitFlash2.visible = true
+                        } //Close onStarted.
+
+                        NumberAnimation {
+                            target: bitFlash2
+                            property: "scale"
+                            duration: bitFlash.duration / 2
+                            from: 0
+                            to: 1
+                        } //Close NumberAnimation.
+
+                        NumberAnimation {
+                            target: bitFlash2
+                            property: "border.width"
+                            duration: bitFlash2.duration / 2
+                            from: bitFlash2.width / 2
+                            to: 0
+                            easing.type: Easing.OutCubic
+                        } //Close NumberAnimation.
+
+                        NumberAnimation {
+                            target: bitFlash2
+                            property: "scale"
+                            duration: bitFlash2.duration / 2
+                            from: 1
+                            to: 0
+                            easing.amplitude: Easing.InBack
+                        } //Close NumberAnimation.
+
+                        onStopped: {
+                            bitFlash2.border.width = bitFlash2.width / 2
+                            bitFlash2.visible = false
+                            flashTimer2.start()
+                        } //Close onStarted.
+
+                    } //Close SequentialAnimation.
+
+                } //Close Rectangle 'flashIcon'.
+
+            }
+        }
+    }
+
+}
